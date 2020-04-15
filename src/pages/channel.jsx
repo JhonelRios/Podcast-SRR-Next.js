@@ -4,13 +4,15 @@ import axios from 'axios';
 
 import '../styles/channel.scss';
 
+import Layout from '../components/Layout';
+import ChannelGrid from '../components/ChannelGrid';
+import PodcastList from '../components/PodcastList';
+
 const channel = (props) => {
     const { channel, channelAudios, childChannels } = props;
 
     return (
-        <>
-            <header>Podcast</header>
-
+        <Layout title={channel.title}>
             <div
                 className="banner"
                 style={{
@@ -21,41 +23,15 @@ const channel = (props) => {
             <h1>{channel.title}</h1>
 
             <h2>Últimos Podcast</h2>
-            {channelAudios.map((audio) => (
-                <Link href={`/podcast?id=${audio.id}`} key={audio.id}>
-                    <a className="podcast">
-                        <h3>{audio.title}</h3>
-                        <div className="meta">
-                            {Math.ceil(audio.duration / 60)} minutes
-                        </div>
-                    </a>
-                </Link>
-            ))}
+            <PodcastList channelAudios={channelAudios} />
 
             {childChannels.length > 0 && (
                 <div>
                     <h2>Series</h2>
-                    <div className="channels">
-                        {childChannels.map((childChannel) => (
-                            <Link
-                                key={childChannel.id}
-                                href={`/channel?id=${childChannel.id}`}>
-                                <a className="channel">
-                                    <img
-                                        src={
-                                            childChannel.urls.logo_image
-                                                .original
-                                        }
-                                        alt=""
-                                    />
-                                    <h2>{childChannel.title}</h2>
-                                </a>
-                            </Link>
-                        ))}
-                    </div>
+                    <ChannelGrid channels={childChannels} />
                 </div>
             )}
-        </>
+        </Layout>
     );
 };
 
